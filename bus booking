@@ -1,0 +1,87 @@
+# Improved Bus Ticket Booking System
+
+# Initialize seating (5 rows x 6 seats)
+rows, seats_per_row = 5, 6
+seating = [["Available" for _ in range(seats_per_row)] for _ in range(rows)]
+bookings = {}  # key: name, value: (row, seat)
+
+def show_available_seats():
+    print("\nAvailable Seats:")
+    for i in range(rows):
+        for j in range(seats_per_row):
+            status = seating[i][j]
+            print(f"Row {i+1}, Seat {j+1}: {status}")
+    input("Press enter to continue...")
+
+def show_bookings():
+    if bookings:
+        print("\nCurrent Bookings:")
+        for name, (row, seat) in bookings.items():
+            print(f"Name: {name}, Row: {row+1}, Seat: {seat+1}")
+    else:
+        print("\nNo bookings found.")
+    input("Press enter to continue...")
+
+def book_seat():
+    name = input("Enter your name: ").strip()
+    if name in bookings:
+        print("You already have a booking!")
+        input("Press enter to continue...")
+        return
+    mobile = input("Enter your mobile number: ")
+    age = input("Enter your age: ")
+    gender = input("Enter your gender: ")
+    email = input("Enter your mail id: ")
+
+    show_available_seats()
+    
+    try:
+        row = int(input("Enter row number (1-5): ")) - 1
+        seat = int(input("Enter seat number (1-6): ")) - 1
+        if row < 0 or row >= rows or seat < 0 or seat >= seats_per_row:
+            print("Invalid seat selection!")
+        elif seating[row][seat] == "Booked":
+            print("Seat already booked. Please choose another.")
+        else:
+            seating[row][seat] = "Booked"
+            bookings[name] = (row, seat)
+            print(f"Booking successful. Your seat is Row {row+1}, Seat {seat+1}")
+    except ValueError:
+        print("Invalid input. Please enter numbers only.")
+    input("Press enter to continue...")
+
+def cancel_booking():
+    name = input("Enter your name: ").strip()
+    if name in bookings:
+        row, seat = bookings[name]
+        seating[row][seat] = "Available"
+        del bookings[name]
+        print("Booking cancelled")
+    else:
+        print("No booking found for this name.")
+    input("Press enter to continue...")
+
+# Main Menu Loop
+while True:
+    print("\nWelcome to Bus Ticket Booking System")
+    print("1. Show available seats")
+    print("2. Show bookings")
+    print("3. Book a seat")
+    print("4. Cancel a booking")
+    print("5. Exit")
+    
+    choice = input("Enter your choice (1-5): ")
+    
+    if choice == '1':
+        show_available_seats()
+    elif choice == '2':
+        show_bookings()
+    elif choice == '3':
+        book_seat()
+    elif choice == '4':
+        cancel_booking()
+    elif choice == '5':
+        print("[Program finished]")
+        break
+    else:
+        print("Invalid choice! Please enter a number between 1-5.")
